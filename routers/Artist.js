@@ -101,7 +101,7 @@ router.get("/sanatcilar", async (req, res) => {
 
 module.exports = router;
 
-router.get("/:id", RequireLogin, async (req, res) => {
+router.get("/:id", async (req, res) => {
   const {id} = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

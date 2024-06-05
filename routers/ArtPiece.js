@@ -41,25 +41,6 @@ router.post("/", RequireLogin, async (req, res) => {
 
 module.exports = router;
 
-router.get("/pieces/:id", async (req, res) => {
-  const {id} = req.params;
-  console.log("%croutersArtPiece.js:46 id", "color: #26bfa5;", id);
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({error: "Invalid art piece ID"});
-  }
-
-  try {
-    const artPieces = await ArtPiece.find({userId: id});
-    if (!artPieces) {
-      return res.status(404).json({error: "Art piece not found"});
-    }
-    res.json(artPieces);
-  } catch (err) {
-    console.error("Error fetching art piece:", err);
-    res.status(500).json({error: "Internal server error"});
-  }
-});
-
 module.exports = router;
 
 router.get("/latest", async (req, res) => {
@@ -74,7 +55,7 @@ router.get("/latest", async (req, res) => {
 
 module.exports = router;
 
-router.delete("/pieces2/:id", RequireLogin, async (req, res) => {
+router.delete("/:id", RequireLogin, async (req, res) => {
   const {id} = req.params;
   const userId = req.user.id; // JWT doğrulamasından sonra gelen kullanıcı ID
 
@@ -98,7 +79,7 @@ router.delete("/pieces2/:id", RequireLogin, async (req, res) => {
 
 module.exports = router;
 
-router.get("/pieces3/fotograf", async (req, res) => {
+router.get("/fotograf", async (req, res) => {
   try {
     const artPieces = await ArtPiece.find({category: "fotograf"});
     if (!artPieces || artPieces.length === 0) {
@@ -113,7 +94,7 @@ router.get("/pieces3/fotograf", async (req, res) => {
 
 module.exports = router;
 
-router.get("/pieces4/resim", async (req, res) => {
+router.get("/resim", async (req, res) => {
   try {
     const artPieces = await ArtPiece.find({category: "resim"});
     if (!artPieces || artPieces.length === 0) {
@@ -128,7 +109,7 @@ router.get("/pieces4/resim", async (req, res) => {
 
 module.exports = router;
 
-router.get("/pieces5/heykel", async (req, res) => {
+router.get("/heykel", async (req, res) => {
   try {
     const artPieces = await ArtPiece.find({category: "heykel"});
     if (!artPieces || artPieces.length === 0) {
