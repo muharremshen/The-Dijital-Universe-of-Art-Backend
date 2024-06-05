@@ -3,11 +3,26 @@ const Schema = mongoose.Schema;
 
 const auctionSchema = new Schema(
   {
-    image: {type: String, required: true},
-    description: {type: String},
-    artName: {type: Schema.Types.ObjectId, required: true},
-    time: {type: Date, required: true},
-    startPrice: {type: Number, required: true},
+    artName: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    startPrice: {
+      type: Number,
+      required: true
+    },
+    time: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
     bids: {
       type: [
         {

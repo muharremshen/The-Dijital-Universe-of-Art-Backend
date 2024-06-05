@@ -3,7 +3,17 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Auction = require("../models/AuctionModel");
 
-// Müzayede başlatma
+router.get("/list", async (req, res) => {
+  try {
+    console.log("%crouters/Auction.js:8 dasdaaddasdasdsa ", "color: #26bfa5;");
+    const auctions = await Auction.find();
+    res.json(auctions);
+  } catch (error) {
+    console.error("Error fetching auction details:", error);
+    res.status(500).json({error: "Server error"});
+  }
+});
+
 router.post("/start", async (req, res) => {
   const {image, description, artName, time, startPrice} = req.body;
   try {
@@ -18,6 +28,19 @@ router.post("/start", async (req, res) => {
     res.status(201).json(newAuction);
   } catch (error) {
     console.error("Error starting auction:", error);
+    res.status(500).json({error: "Server error"});
+  }
+});
+router.delete("/:id", async (req, res) => {
+  const {id} = req.params;
+  try {
+    const auction = await Auction.findByIdAndDelete(id);
+    if (!auction) {
+      return res.status(404).json({error: "Auction not found"});
+    }
+    res.status(200).json({message: "Auction deleted successfully"});
+  } catch (error) {
+    console.error("Error deleting auction:", error);
     res.status(500).json({error: "Server error"});
   }
 });
