@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 
 router.put("/:id", RequireLogin, async (req, res) => {
   const {id} = req.params;
-  const userId = req.user._id; // Assume RequireLogin middleware adds user object to req
+  const userId = req.user._id;
   console.log("%croutersAuth.js:10 req.params", "color: #26bfa5;", req.params);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
