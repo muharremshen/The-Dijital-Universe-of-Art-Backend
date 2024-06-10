@@ -78,17 +78,23 @@ router.get("/users", async (req, res) => {
     res.status(500).json({error: "Internal server error"});
   }
 });
+
 router.delete("/:id", async (req, res) => {
   const {id} = req.params;
 
   try {
-    const users = await AuthModel.findById(id);
-    if (!users) {
+    // Kullanıcıyı bul
+    const user = await AuthModel.findById(id);
+    if (!user) {
       return res.status(404).json({message: "Kullanıcı bulunamadı"});
     }
 
+    // Kullanıcıyı sil
     await AuthModel.findByIdAndDelete(id);
+
+    // Kullanıcıya ait sanat parçalarını sil
     await ArtPiece.deleteMany({userId: id});
+
     res.json({message: "Kullanıcı başarıyla silindi"});
   } catch (error) {
     console.error("Error deleting art piece:", error);

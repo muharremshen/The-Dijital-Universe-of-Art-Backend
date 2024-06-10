@@ -17,17 +17,13 @@ router.post("/login", async (req, res) => {
     }
 
     // Şifre kontrolü
-    const isPasswordCorrect = await Admin.findOne({password});
+    const isPasswordCorrect = await bcrypt.compare(password, admin.password);
     if (!isPasswordCorrect) {
       return res.status(400).json({error: "Kullanıcı adı veya şifre hatalı"});
     }
 
-    // JWT oluştur
-    // const token = jwt.sign({id: admin._id}, process.env.JWT_SECRET, {
-    //   expiresIn: "1h"
-    // });
-
-    res.json(admin);
+    // Admin'in _id bilgisini yanıt olarak döndür
+    res.json({_id: admin._id});
   } catch (error) {
     console.error("Giriş hatası:", error);
     res.status(500).json({error: "Sunucu hatası"});
