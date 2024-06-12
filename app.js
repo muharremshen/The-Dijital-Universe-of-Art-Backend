@@ -20,36 +20,40 @@ app.use(morgan("combined"));
 app.use(express.json({limit: "10mb"}));
 app.use(express.urlencoded({extended: true, limit: "10mb"}));
 
-// CORS ayarlarını genişletin
 app.use(
   cors({
-    origin: "http://localhost:5173", // Frontend uygulamanızın adresi
+    origin: "http://localhost:5173",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true // Gerekiyorsa kimlik doğrulama bilgilerini dahil eder
+    credentials: true
   })
 );
-
-app.use("/", routerIndex);
 
 const server = http.createServer(app);
 
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Frontend uygulamanızın adresi
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"]
   }
 });
 
+// Middleware to make io accessible in routes
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
+app.use("/", routerIndex);
+
 io.on("connection", socket => {
   console.log("Bir kullanıcı bağlandı");
 
-  // Teklif güncelleme olayı
   socket.on("placeBid", bid => {
     console.log("Yeni teklif:", bid);
-    // Teklif güncelleme logic
     io.emit("bidUpdate", {
       auctionId: bid.auctionId,
-      newBid: bid.amount
+      newBid: bid.amount,
+      userName: bid.userName
     });
   });
 

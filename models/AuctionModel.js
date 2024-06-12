@@ -15,6 +15,15 @@ const auctionSchema = new Schema(
       type: Number,
       required: true
     },
+    currentBid: {
+      type: Number,
+      default: 0,
+      required: true
+    },
+    highestBidder: {
+      type: Schema.Types.ObjectId,
+      ref: "Auth"
+    },
     time: {
       type: Number,
       required: true
@@ -36,5 +45,7 @@ const auctionSchema = new Schema(
   },
   {timestamps: true}
 );
-
+auctionSchema.virtual("endTime").get(function () {
+  return new Date(this.createdAt.getTime() + this.time * 60000);
+});
 module.exports = mongoose.model("Auction", auctionSchema);

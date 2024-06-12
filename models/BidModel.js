@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const bidSchema = new Schema(
   {
     auction: {type: Schema.Types.ObjectId, ref: "Auction", required: true},
-    user: {type: Schema.Types.ObjectId, ref: "User", required: true},
+    user: {type: Schema.Types.ObjectId, ref: "Auth", required: true},
     amount: {type: Number, required: true}
   },
   {timestamps: true}
